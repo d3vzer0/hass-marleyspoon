@@ -1,0 +1,15 @@
+{
+  "domain": "marleyspoon",
+  "name": "Marley Spoon",
+  "config_flow": true,
+  "documentation": "https://github.com/d3vzer0/hass-marleyspoon",
+  "requirements": ["aiohttp"],
+  "ssdp": [],
+  "zeroconf": [],
+  "homekit": {},
+  "dependencies": [],
+  "codeowners": [
+    "@d3vzer0"
+  ],
+  "iot_class": "cloud_polling"
+}

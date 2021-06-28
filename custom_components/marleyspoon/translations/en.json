@@ -1,0 +1,23 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Device is already configured"
+        },
+        "error": {
+            "cannot_connect": "Failed to connect",
+            "invalid_auth": "Incorrect credentials, failed to authenticate",
+            "invalid_domain": "Unsupported domain. Options: nl, de, com",
+            "unknown": "Unexpected error"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "domain": "Domain",
+                    "password": "Password",
+                    "username": "Username"
+                }
+            }
+        }
+    },
+    "title": "Marley Spoon"
+}
