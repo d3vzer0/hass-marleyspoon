@@ -1,8 +1,8 @@
+from __future__ import annotations
 from homeassistant import config_entries
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.exceptions import HomeAssistantError
-from __future__ import annotations
 from typing import Any
 from .const import DOMAIN
 from .api import MarleySpoon, ValueNotFound, AuthFailed
