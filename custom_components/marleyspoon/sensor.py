@@ -5,7 +5,7 @@ from homeassistant.helpers.update_coordinator import (
 )
 from datetime import timedelta
 from .const import DOMAIN
-from .api import MarleySpoon
+from .api import MarleySpoonAPI
 import logging
 
 SCAN_INTERVAL = timedelta(minutes=10)
@@ -19,11 +19,30 @@ async def async_setup_entry(hass, entry, async_add_entities):
     api_host = api_config["api_host"]
 
     async def async_update_data():
-        all_orders = await MarleySpoon.orders(user_id, api_token, api_host)
+        marley_api = MarleySpoonAPI(api_token, api_host)
+        all_orders = await marley_api.orders(user_id)
         parsed_orders = []
         for index, order in enumerate(reversed(all_orders)):
             order["name"] = f"ms_order_week_{index}"
             parsed_orders.append(order)
+
+        for recipe in parsed_orders[0]["recipes"]:
+            recipe_details = await marley_api.recipe(recipe["id"])
+            recipe["details"] = {
+                "calories": recipe_details["calories"],
+                "difficulty": recipe_details["difficulty"],
+                "preparation_time": recipe_details["preparation_time"],
+                "meal_attributes": recipe_details["meal_attributes"],
+                "nutrition": recipe_details["nutrition"],
+                "additional_allergens": recipe_details["additional_allergens"],
+                "steps": recipe_details["steps"],
+                "ingredients": recipe_details["ingredients"],
+                "assumed_ingredients": recipe_details["assumed_ingredients"],
+                "assumed_cooking_utilities": recipe_details[
+                    "assumed_cooking_utilities"
+                ],
+                "cooking_tip": recipe_details["cooking_tip"],
+            }
         return parsed_orders
 
     coordinator = DataUpdateCoordinator(

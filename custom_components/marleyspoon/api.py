@@ -92,25 +92,39 @@ class MarleySpoon:
             raise AuthFailed(match_error.group(1).strip())
         return self.user_id, self.api_token, self.api_host
 
-    @staticmethod
-    async def orders(
-        user_id: str,
-        api_token: str,
-        api_host: str = "https://api.marleyspoon.com",
-        region: str = "nl",
-    ) -> dict:
-        uri = f"{api_host}/users/{user_id}/orders/current"
-        params = {"brand": "ms", "country": region, "product_type": "web"}
-        headers = {"Authorization": f"Bearer {api_token}"}
-
-        async with aiohttp.ClientSession() as session:
-            async with session.get(uri, params=params, headers=headers) as resp:
-                result = await resp.json()
-        return result
-
     async def __aenter__(self):
         self.session = aiohttp.ClientSession()
         return self
 
     async def __aexit__(self, exc_t, exc_v, exc_tb):
         await self.session.close()
+
+
+class MarleySpoonAPI:
+    def __init__(
+        self,
+        api_token: str,
+        api_host: str = "https://api.marleyspoon.com",
+        region: str = "nl",
+    ):
+        self.region = region
+        self.api_host = api_host
+        self.api_token = api_token
+
+    async def __get(self, uri) -> dict:
+        params = {"brand": "ms", "country": self.region, "product_type": "web"}
+        headers = {"Authorization": f"Bearer {self.api_token}"}
+        async with aiohttp.ClientSession() as session:
+            async with session.get(uri, params=params, headers=headers) as resp:
+                result = await resp.json()
+        return result
+
+    async def recipe(self, recipe) -> dict:
+        uri = f"{self.api_host}/recipes/{recipe}"
+        result = await self.__get(uri)
+        return result
+
+    async def orders(self, user_id: str) -> dict:
+        uri = f"{self.api_host}/users/{user_id}/orders/current"
+        result = await self.__get(uri)
+        return result
