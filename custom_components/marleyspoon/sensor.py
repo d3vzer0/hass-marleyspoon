@@ -98,6 +98,7 @@ class RecipeEntity(CoordinatorEntity, Entity):
         attr["subtitle"] = entity_object["subtitle"]
         attr["image"] = entity_object["image"]
         attr["quantity"] = entity_object["quantity"]
+        attr["meal_type"] = entity_object["meal_type"]
         attr["calories"] = entity_object["calories"]
         attr["difficulty"] = entity_object["difficulty"]
         attr["preparation_time"] = entity_object["preparation_time"]
